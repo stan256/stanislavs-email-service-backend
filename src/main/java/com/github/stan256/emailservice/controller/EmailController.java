@@ -1,15 +1,25 @@
 package com.github.stan256.emailservice.controller;
 
-import com.github.stan256.emailservice.model.EmailData;
-import org.springframework.stereotype.Controller;
+import com.github.stan256.emailservice.model.EmailModel;
+import com.github.stan256.emailservice.service.EmailService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller("email")
+@RestController
+@RequestMapping("/emails")
 public class EmailController {
 
-    @PostMapping("send")
-    public void sendEmail(EmailData emailData) {
+    private final EmailService emailService;
 
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @PostMapping("send")
+    public void sendEmail(@RequestBody EmailModel emailModel) {
+        emailService.sendEmail(emailModel);
     }
 
 }

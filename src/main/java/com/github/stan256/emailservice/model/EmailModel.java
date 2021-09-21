@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class EmailData {
+public class EmailModel {
     private String subject;
     private List<String> recipients;
     private List<String> cc;

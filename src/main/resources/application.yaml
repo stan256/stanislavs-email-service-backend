@@ -1,0 +1,15 @@
+email:
+  from: stanislavstudzinskyi@gmail.com
+  providers:
+    # sendgrid
+    sendgrid:
+      host: smtp.sendgrid.net
+      port: 587
+      username: apikey
+      password: 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
+    # mailjet
+    mailjet:
+      host: in-v3.mailjet.com
+      port: 587
+      username: 7a690c2d167e444503a7584b98cb5df8
+      password: 8d27fe0a9b4b1998f10539ea1d943ebe
