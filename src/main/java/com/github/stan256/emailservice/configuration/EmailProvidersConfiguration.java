@@ -1,9 +1,10 @@
 package com.github.stan256.emailservice.configuration;
 
-import com.github.stan256.emailservice.model.configuration.EmailProviderConfig;
-import com.github.stan256.emailservice.model.configuration.MailjetProperties;
-import com.github.stan256.emailservice.model.configuration.SendgridProperties;
+import com.github.stan256.emailservice.configuration.providers.EmailProviderConfig;
+import com.github.stan256.emailservice.configuration.providers.MailjetProperties;
+import com.github.stan256.emailservice.configuration.providers.SendgridProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,6 +26,7 @@ public class EmailProvidersConfiguration {
 
     @Bean
     @Order(1)
+    @Qualifier("mailjet")
     public JavaMailSenderImpl mailjetProvider() {
         JavaMailSenderImpl javaMailSender = initializeMailSender(mailjetProperties);
         log.info("Email provider initialized: " + mailjetProperties.getHost());
@@ -33,7 +35,8 @@ public class EmailProvidersConfiguration {
 
     @Bean
     @Order(2)
-    public JavaMailSenderImpl sendgridConfig() {
+    @Qualifier("sendgrid")
+    public JavaMailSenderImpl sendgridProvider() {
         JavaMailSenderImpl javaMailSender = initializeMailSender(sendgridProperties);
         log.info("Email provider initialized: " + sendgridProperties.getHost());
         return javaMailSender;

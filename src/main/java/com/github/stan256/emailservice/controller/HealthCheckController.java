@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/health_check")
+@RequestMapping("/api/health_check")
 public class HealthCheckController {
+
+    final static String SUCCESSFUL_STATUS = "All works fine! ";
 
     @GetMapping("get")
     public String getHealthCheck() {
-        return "All works fine! " + LocalDateTime.now();
+        return SUCCESSFUL_STATUS + LocalDateTime.now();
     }
 
 }

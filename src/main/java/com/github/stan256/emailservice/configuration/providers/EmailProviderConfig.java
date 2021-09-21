@@ -1,4 +1,4 @@
-package com.github.stan256.emailservice.model.configuration;
+package com.github.stan256.emailservice.configuration.providers;
 
 import lombok.Data;
 

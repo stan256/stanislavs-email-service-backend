@@ -51,7 +51,7 @@ public class EmailService {
         System.err.println(emailModel);
     }
 
-    private SimpleMailMessage convertEmailData(EmailModel emailModel) {
+    SimpleMailMessage convertEmailData(EmailModel emailModel) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(emailSender);
         simpleMailMessage.setSubject(emailModel.getSubject());
