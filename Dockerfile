@@ -1,4 +1,3 @@
 FROM azul/zulu-openjdk-alpine:11
-VOLUME /tmp
 COPY build/libs/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-Dserver.port=$PORT","-jar","/app.jar"]
