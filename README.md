@@ -7,6 +7,9 @@ Backlog:
 6. Tests for the frontend
 7. Providing of the more detailed message for the frontend in case of error
 
+Providers:
+Mailjet & Sendgrid were used for email sendings
+
 Experience with used technologies:
 Java 8+: ~6years
 Spring Framework 4+: ~5 years
