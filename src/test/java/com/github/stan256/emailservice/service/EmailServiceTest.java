@@ -1,30 +1,24 @@
 package com.github.stan256.emailservice.service;
 
-import com.github.stan256.emailservice.exception.AllProvidersNotAvailableException;
 import com.github.stan256.emailservice.model.EmailModel;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
@@ -45,28 +39,33 @@ public class EmailServiceTest {
     }
 
     @Test
-    public void firstProviderFailoverScenario() {
+    public void firstProviderFailoverScenario() throws InterruptedException, ExecutionException {
         EmailModel model = testEmail();
         SimpleMailMessage testMessage = service.convertEmailData(model);
 
         Mockito.doThrow(new MailSendException("Error scenario...")).when(mailjet).send(testMessage);
         Mockito.doNothing().when(sendgrid).send(testMessage);
 
-        service.sendEmail(model);
+        CompletableFuture<Boolean> future = service.sendEmail(model);
 
+        Boolean bool = future.get();
+        Assertions.assertTrue(bool);
         verify(mailjet, times(1)).send(testMessage);
         verify(sendgrid, times(1)).send(testMessage);
     }
 
     @Test
-    public void allProvidersAreNotAvailable() {
+    public void allProvidersAreNotAvailable() throws ExecutionException, InterruptedException {
         EmailModel model = testEmail();
         SimpleMailMessage testMessage = service.convertEmailData(model);
 
         Mockito.doThrow(new MailSendException("Error scenario...")).when(mailjet).send(testMessage);
         Mockito.doThrow(new MailSendException("Error scenario...")).when(sendgrid).send(testMessage);
 
-        Assertions.assertThrows(AllProvidersNotAvailableException.class, () -> service.sendEmail(model));
+        CompletableFuture<Boolean> future = service.sendEmail(model);
+
+        Boolean bool = future.get();
+        assertFalse(bool);
     }
 
     private EmailModel testEmail() {
